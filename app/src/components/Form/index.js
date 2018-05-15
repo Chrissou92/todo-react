@@ -2,6 +2,7 @@
 * Npm import
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 /*
 * local import
 */
@@ -9,8 +10,11 @@ import React from 'react';
 /*
 * Code
 */
-const Form = () => (
-  <form id="todo-form">
+const Form = ({ onFormSubmit }) => (
+  <form
+    id="todo-form"
+    onSubmit={onFormSubmit}
+  >
     <input
       type="text"
       id="todo-input"
@@ -19,6 +23,9 @@ const Form = () => (
     />
   </form>
 );
+Form.propTypes = {
+  onFormSubmit: PropTypes.func.isRequired,
+};
 /*
 * Export
 */
