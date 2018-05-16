@@ -27,7 +27,7 @@ class App extends React.Component {
      <div id="todo">
        <Form onFormSubmit={this.handleSubmit} />
        <Counter count={2} />
-       <Tasks />
+       <Tasks tasks={[]} />
      </div>
    );
  }
