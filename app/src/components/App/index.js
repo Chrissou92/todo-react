@@ -15,6 +15,8 @@ class App extends React.Component {
   /* Actions
   *
   */
+
+ // fonction qui recup la valeur de l'imput
  handleSubmit = (evt) => {
    evt.preventDefault();
    const input = document.getElementById('todo-input');
@@ -24,7 +26,7 @@ class App extends React.Component {
    return (
      <div id="todo">
        <Form onFormSubmit={this.handleSubmit} />
-       <Counter />
+       <Counter count={2} />
        <Tasks />
      </div>
    );

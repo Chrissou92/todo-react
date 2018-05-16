@@ -2,6 +2,8 @@
 * Npm import
 */
 import React from 'react';
+import PropTypes from 'prop-types';
+
 /*
 * local import
 */
@@ -9,11 +11,29 @@ import React from 'react';
 /*
 * Code
 */
-const Counter = () => (
-  <div id="todo-counter">
-    0 tâche en cours...
-  </div>
-);
+const Counter = ({ count }) => {
+  let message;
+  // condition du message :
+  if (count === 0) {
+    message = 'aucune tâche en cours';
+  }
+  else if (count === 1) {
+    message = 'Une tâche en cours';
+  }
+  else {
+    message = `${count} tâches en cours`;
+  }
+
+  return (
+    <div id="todo-counter">
+      {message}
+    </div>
+  );
+};
+
+Counter.propTypes = {
+  count: PropTypes.number.isRequired,
+};
 /*
 * Export
 */
