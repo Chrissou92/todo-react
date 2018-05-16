@@ -1,28 +1,37 @@
 /*
-* Npm import
-*/
+ * Npm import
+ */
 import React from 'react';
 import PropTypes from 'prop-types';
 
+
 /*
-* local import
-*/
+ * Local import
+ */
 import Task from './Task';
+
+
 /*
-* Code
-*/
-const Tasks = ({ tasks }) => (
+ * Code
+ */
+const Tasks = ({ tasks, actions }) => (
   <ul id="todo-list">
     {tasks.map(task => (
-      <Task {...task} />
+      <Task
+        key={task.id}
+        {...task}
+        {...actions}
+      />
     ))}
   </ul>
 );
-
 Tasks.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  actions: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
 };
+
+
 /*
-* Export
-*/
+ * Export default
+ */
 export default Tasks;

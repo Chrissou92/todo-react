@@ -11,8 +11,8 @@
   border: 1px solid #ccc
   border-radius: .3em
   font-size: 1.2em
-  padding: 1em
   margin: .5em 0
+  padding: 1em
 
   &--done
     opacity: .5
@@ -22,3 +22,11 @@
 
   &--done &-label
     text-decoration: line-through
+  &-trash
+  &-star
+    cursor: pointer
+    float: right
+    margin-left: .5em
+
+  &--favorite &-star
+    color: #daa520

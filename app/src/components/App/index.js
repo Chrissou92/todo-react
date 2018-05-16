@@ -1,74 +1,136 @@
 /*
-* Npm import
-*/
+ * Npm import
+ */
 import React from 'react';
+
+
 /*
-* local import
-*/
+ * Local import
+ */
 import Form from 'src/components/Form';
 import Counter from 'src/components/Counter';
 import Tasks from 'src/components/Tasks';
+import tasksInitial from 'src/data';
+
 /*
-* Code
-*/
+ * Code
+ */
+
+const ids = tasksInitial.map(obj => obj.id);
+// on calcule l'id max, si le tableau est vide l'id est zero
+let lastId = ids.length > 0 ? Math.max(...ids) : 0;
+/*
+ * Component
+ */
 class App extends React.Component {
-  /* Actions
-  *
-  */
-/*
-* state initial
-*/
-state = {
-  tasks: [
-    {
-      id: 1,
-      label: 'Faire une todo-list en JS',
-      done: true,
-      favorite: false,
-    },
-    {
-      id: 12,
-      label: 'Faire une todo-list en React',
+  /*
+   * State initial
+   */
+  state = {
+    tasks: tasksInitial,
+    input: '',
+  }
+
+
+  /*
+   * Actions
+   */
+  addTask = () => {
+    lastId += 1;
+
+    const task = {
+      id: lastId,
+      label: this.state.input,
       done: false,
-      favorite: true,
-    },
-    {
-      id: 43,
-      label: 'Vivre paisiblement',
-      done: false,
-      favorite: false,
-    },
-    {
-      id: 5,
-      label: 'Coder Facebook',
-      done: false,
-      favorite: false,
-    },
-  ],
+    };
+
+    /* On ajoute la tâche au state */
+    this.setState({
+      tasks: [task, ...this.state.tasks],
+      input: '',
+    });
+  }
+
+  checkTask = idToCheck => () => {
+    // Je calcule mes nouvelles données
+    const newTasks = this.state.tasks.map((task) => {
+      if (task.id === idToCheck) {
+        return {
+          ...task,
+          done: !task.done,
+        };
+      }
+      return task;
+    });
+
+    this.setState({ tasks: newTasks });
+  }
+
+  deleteTask = idToDelete => () => {
+    const newTasks = this.state.tasks.filter(task => task.id !== idToDelete);
+    this.setState({ tasks: newTasks });
+  }
+
+  favoriteTask = idToFav => () => {
+    const newTasks = this.state.tasks.map((task) => {
+      if (task.id === idToFav) {
+        return {
+          ...task,
+          favorite: !task.favorite,
+        };
+      }
+      return task;
+    });
+    this.setState({ tasks: newTasks });
+  }
+
+  changeInput = (value) => {
+    this.setState({ input: value });
+  }
+  /*
+   * Render
+   */
+  render() {
+    // Vars
+    const { tasks, input } = this.state;
+
+    // On récupère les tâches pas effectuées
+    const undoneTasks = tasks.filter(task => !task.done);
+    // et on compte combien il y en a
+    const count = undoneTasks.length;
+
+    const orderedTasks = [
+      // Tâches non effectuées favori
+      ...undoneTasks.filter(task => task.favorite),
+      // Tâches non effectuées non favori
+      ...undoneTasks.filter(task => !task.favorite),
+      // Tâches effectuées
+      ...tasks.filter(task => task.done),
+    ];
+
+    return (
+      <div id="todo">
+        <Form
+          onFormSubmit={this.addTask}
+          onInputChange={this.changeInput}
+          inputValue={input}
+        />
+        <Counter count={count} />
+        <Tasks
+          tasks={orderedTasks}
+          actions={{
+            onInputChange: this.checkTask,
+            onDeleteTask: this.deleteTask,
+            onFavoriteTask: this.favoriteTask,
+          }}
+        />
+      </div>
+    );
+  }
 }
- // fonction qui recup la valeur de l'imput
- handleSubmit = (evt) => {
-   evt.preventDefault();
-   const input = document.getElementById('todo-input');
-   console.log(input.value);
- }
- render() {
-   // vars pour recuperer les taches
-   const { tasks } = this.state;
-   // recup tache pas effectuées
-   const undoneTasks = tasks.filter(task => !task.done);
-   // on compte le nombre de tâches
-   const count = undoneTasks.length;
-   return (
-     <div id="todo">
-       <Form onFormSubmit={this.handleSubmit} />
-       <Counter count={count} />
-       <Tasks tasks={tasks} />
-     </div>
-   );
- }
-}
+
+
 /*
-* Export
-*/
+ * Export default
+ */
 export default App;
